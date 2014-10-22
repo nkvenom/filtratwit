@@ -6,9 +6,9 @@ import sys
 import tweepy
 
 
-def get_auth():
+def get_auth(conf_path='auth_twitter.conf'):
     """ Lee los datos de autenticación de un archivo JSON """
-    with open('auth_twitter.conf') as auth_f:
+    with open(conf_path) as auth_f:
         auth_data = json.loads(auth_f.read())
         consumer_key = auth_data['consumer_key']
         consumer_secret = auth_data['consumer_secret']

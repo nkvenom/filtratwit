@@ -146,16 +146,18 @@ class StreamWatcherListener(tweepy.StreamListener):
 def main():
     stream = None
     try:
-        # Prompt for login credentials and setup stream object
-        my_auth = get_auth()
 
         p = optparse.OptionParser('prog -t "@foo, #baz, #bar" -f "user_id"')
         p.add_option('--only_with_emojis', '-w', action='store_true', default=False)
         p.add_option('--locs', default=None, help='4 coords representing a bounding box')
         p.add_option('--lang', default=None)
+        p.add_option('--auth', default='auth_twitter.conf')
         p.add_option('--followlist', '-f')
 
         opts, args = p.parse_args()
+
+        print("Auth={}".format(opts.auth))
+        my_auth = get_auth(opts.auth)
 
         follow_list = track_list = []
         # if len(sys.argv) == 1:
@@ -174,8 +176,6 @@ def main():
         if follow_list:
             follow_list = [u.strip() for u in follow_list.split(',') if u != '']
 
-        # if track_list:
-        #    track_list = [k.strip() for k in track_list.split(',') if k != '']
 
         f_name = 'datwits'
 
