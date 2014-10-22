@@ -52,4 +52,7 @@ docs/_build/
 
 # PyBuilder
 target/
-.idea
+
+# Custom
+.idea/
+temp/
