@@ -8,7 +8,6 @@ import json
 
 from textwrap import TextWrapper
 import optparse
-import sys
 import re
 
 import tweepy
@@ -160,15 +159,6 @@ def main():
         my_auth = get_auth(opts.auth)
 
         follow_list = track_list = []
-        # if len(sys.argv) == 1:
-        # print('Interactive mode enabled, if you want to call with options ')
-        #     print('prog -t "@foo, #baz, #bar" -f "user_id"')
-        #     follow_list = input('Users to follow (comma separated): ').strip()
-        #     track_list = input('Keywords to track (comma separated): ').strip()
-        # else:
-        #     follow_list = opts.followlist
-        #     track_list = opts.tracklist
-
 
         follow_list = opts.followlist
         track_list = args
