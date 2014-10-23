@@ -7,7 +7,7 @@ from datetime import datetime
 import json
 
 from textwrap import TextWrapper
-import optparse
+import argparse
 import re
 
 import tweepy
@@ -145,23 +145,26 @@ class StreamWatcherListener(tweepy.StreamListener):
 def main():
     stream = None
     try:
+        parser = argparse.ArgumentParser(description='Filter twits using the official API')
 
-        p = optparse.OptionParser('prog -t "@foo, #baz, #bar" -f "user_id"')
-        p.add_option('--only_with_emojis', '-w', action='store_true', default=False)
-        p.add_option('--locs', default=None, help='4 coords representing a bounding box')
-        p.add_option('--lang', default=None)
-        p.add_option('--auth', default='auth_twitter.conf')
-        p.add_option('--followlist', '-f')
+        parser.add_argument('-w', '--only_with_emojis', default=False, action='store_true')
+        parser.add_argument('--locs', nargs='?', help='4 coords representing a bounding box')
+        parser.add_argument('--lang', nargs='?', help='filter in the client side by language')
+        parser.add_argument('--auth', nargs='?', default='auth_twitter.conf')
+        parser.add_argument('-f', '--followlist', help='IDs of specified twitter accounts')
+        parser.add_argument('tracklist', nargs='+')
 
-        opts, args = p.parse_args()
+        args = parser.parse_args()
 
-        print("Auth={}".format(opts.auth))
-        my_auth = get_auth(opts.auth)
+        print("Using auth file={}".format(args.auth))
+        my_auth = get_auth(args.auth)
 
         follow_list = track_list = []
 
-        follow_list = opts.followlist
-        track_list = args
+        follow_list = args.followlist
+
+        #TODO: revisar que los argumentos pasen bien
+        track_list = args.tracklist
 
         if follow_list:
             follow_list = [u.strip() for u in follow_list.split(',') if u != '']
@@ -175,15 +178,15 @@ def main():
             f_name = follow_list[0]
 
         f_name = sanitize(f_name)
-        stream = tweepy.Stream(my_auth, StreamWatcherListener(f_name, lang=opts.lang,
-                                                              only_with_emojis=opts.only_with_emojis), timeout=None)
+        stream = tweepy.Stream(my_auth, StreamWatcherListener(f_name, lang=args.lang,
+                                                              only_with_emojis=args.only_with_emojis), timeout=None)
 
         print('follow_list= {}'.format(follow_list))
         print('track_list= {}'.format(track_list))
 
         locs = None
-        if opts.locs:
-            locs = [float(x) for x in opts.locs.split(',')]
+        if args.locs:
+            locs = [float(x) for x in args.locs.split(',')]
 
         stream.filter(follow=follow_list, track=track_list, locations=locs)
     except KeyboardInterrupt:
