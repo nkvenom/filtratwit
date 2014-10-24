@@ -5,8 +5,8 @@ Utilidad de linea de comandos para filtrar y descargar twits en formato JSON
 
 ### Requisitos
 
-python 2.6X o superior
-pip
+* python 2.6X o superior
+* pip
 
 ### Instalación
 
