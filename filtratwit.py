@@ -157,7 +157,7 @@ def main():
         parser.add_argument('--lang', nargs='?', help='filter in the client side by language, comma separated list of language codes, use \'und\' for undefined')
         parser.add_argument('--auth', nargs='?', default='auth_twitter.conf', metavar='AUTHFILE')
         parser.add_argument('-f', '--followlist', help='IDs of specified twitter accounts')
-        parser.add_argument('tracklist', nargs='+', metavar='TRACK_TERMS')
+        parser.add_argument('tracklist', nargs='+', metavar='track_term', help='Space separated list of terms or hashtags to track')
 
         args = parser.parse_args()
 

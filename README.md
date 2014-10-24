@@ -3,14 +3,12 @@ filtratwit
 
 Utilidad de linea de comandos para filtrar y descargar twits en formato JSON
 
-Requisitos
-==========
+#Requisitos
 
 python 2.6X o superior
 pip
 
-Instalación
-==========
+#Instalación
 
 Para instalar las librerias necesarias pip install -r requirements.txt
 Ir a dev.twitter.com/apps y crear una aplicación llenando los datos necesarios, luego copiar los datos de autenticación a auth_twitter.conf 
