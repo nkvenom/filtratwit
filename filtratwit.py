@@ -181,7 +181,8 @@ def main():
         elif follow_list and len(follow_list) > 0:
             f_name = follow_list[0]
 
-        langs = [u'' + l.strip() for l in args.lang.split(',')]
+        if args.lang is not None:
+            langs = [u'' + l.strip() for l in args.lang.split(',')]
 
         f_name = sanitize(f_name)
         stream = tweepy.Stream(my_auth, StreamWatcherListener(f_name, langs=langs,
