@@ -7,6 +7,7 @@ Utilidad de linea de comandos para filtrar y descargar twits en formato JSON
 
 * python 2.6X o superior
 * pip
+* pythonpy (opcional): para ver como texto los tuits descargados
 
 ### Instalación
 
@@ -20,4 +21,25 @@ Filtrar los tuits de la conferencia RubyConf Argentina:
 
 ```bash
 ./filtratwit.py "#rubyconfar" "@rubyconfar"
+```
+
+Filtrar los tuits de con el hashtag #angularjs que sean en español, el filtrado se hace en el lado del cliente
+
+```bash
+./filtratwit.py "#angularjs" --lang=es
+```
+
+### Aplicaciones complementarias
+
+Instalar la utilidad [pythonpy] (https://github.com/Russell91/pythonpy) que se usa con el comando py
+Para revisar los resultados de proceso se pueden usar pipes y comandos estandar de UNIX
+
+
+```bash
+tail -n20 RubyConfAR-20141024-1601.json | head -n-1 | formatuit
+```
+O para monitoreo constante
+
+```bash
+watch -n5 "tail -n20 RubyConfAR-20141024-1601.json | head -n-1 | formatuit"
 ```
