@@ -8,6 +8,7 @@ import json
 
 from textwrap import TextWrapper
 import argparse
+import os.path
 import re
 
 import tweepy
@@ -73,19 +74,23 @@ class StreamWatcherListener(tweepy.StreamListener):
     status_wrapper = TextWrapper(width=60, initial_indent='    ', subsequent_indent='    ')
     tweets_file = None
 
-    def __init__(self, f_name, lang=None, only_with_emojis=False):
+    def __init__(self, f_name, create_dir=True, langs=None, only_with_emojis=False):
         super(StreamWatcherListener, self).__init__()
         self.only_with_emojis = only_with_emojis
-        self.lang = None
-        if lang:
-            self.lang = u'' + lang
-            
+        self.langs = None
+
         today = datetime.today()
         ctime = today.strftime('%Y%m%d-%H%M')
         print('init called at %s' % ctime)
 
+        filepath = '{}-{}.json'.format(f_name, ctime)
+        if create_dir:
+            if not os.path.exists(f_name):
+                os.makedirs(f_name)
+            filepath = '{}/{}-{}.json'.format(f_name, f_name, ctime)
+
         try:
-            self.tweets_file = codecs.open('%s-%s.json' % (f_name, ctime), 'a', 'utf8')
+            self.tweets_file = codecs.open(filepath, 'a', 'utf8')
         except IOError:
             print('Couldnt open file, exitos')
             exit()
@@ -118,7 +123,7 @@ class StreamWatcherListener(tweepy.StreamListener):
                 print(','.join(unicodedata.name(e, '-') for e in emojis))
 
         twj = json.loads(status)
-        if self.lang is not None and twj['lang'] != self.lang:
+        if self.langs is not None and twj['lang'] not in self.langs:
             return
         try:
             self.tweets_file.write(status)
@@ -147,23 +152,22 @@ def main():
     try:
         parser = argparse.ArgumentParser(description='Filter twits using the official API')
 
-        parser.add_argument('-w', '--only_with_emojis', default=False, action='store_true')
-        parser.add_argument('--locs', nargs='?', help='4 coords representing a bounding box')
-        parser.add_argument('--lang', nargs='?', help='filter in the client side by language')
-        parser.add_argument('--auth', nargs='?', default='auth_twitter.conf')
+        parser.add_argument('-w', '--only_with_emojis', default=False, action='store_true', help='Only store twitts that contains utf-8 emoji like characters')
+        parser.add_argument('--locs', nargs='?', help='4 coords separated by commas, representing a bounding box', metavar='COORDINATES')
+        parser.add_argument('--lang', nargs='?', help='filter in the client side by language, comma separated list of language codes, use \'und\' for undefined')
+        parser.add_argument('--auth', nargs='?', default='auth_twitter.conf', metavar='AUTHFILE')
         parser.add_argument('-f', '--followlist', help='IDs of specified twitter accounts')
-        parser.add_argument('tracklist', nargs='+')
+        parser.add_argument('tracklist', nargs='+', metavar='TRACK_TERMS')
 
         args = parser.parse_args()
 
         print("Using auth file={}".format(args.auth))
         my_auth = get_auth(args.auth)
 
-        follow_list = track_list = []
+        follow_list = []
+        track_list = []
 
         follow_list = args.followlist
-
-        #TODO: revisar que los argumentos pasen bien
         track_list = args.tracklist
 
         if follow_list:
@@ -177,8 +181,10 @@ def main():
         elif follow_list and len(follow_list) > 0:
             f_name = follow_list[0]
 
+        langs = [u'' + l.strip() for l in args.lang.split(',')]
+
         f_name = sanitize(f_name)
-        stream = tweepy.Stream(my_auth, StreamWatcherListener(f_name, lang=args.lang,
+        stream = tweepy.Stream(my_auth, StreamWatcherListener(f_name, langs=langs,
                                                               only_with_emojis=args.only_with_emojis), timeout=None)
 
         print('follow_list= {}'.format(follow_list))
