@@ -3,5 +3,5 @@
 # command="py -c 'from datetime import datetime as dt' -i -x --ji \"'{0:%H:%M:%S}-{1}:{2}'.format(dt.fromtimestamp(int(x['timestamp_ms'])/1000),x['user']['screen_name'],x['text'])\""
 
 C_ARG="from datetime import datetime as dt"
-X_ARG="'{0:%H:%M:%S} @{1}: {2}'.format(dt.fromtimestamp(int(x['timestamp_ms'])/1000), x['user']['screen_name'], x['text'])"
+X_ARG="'{0:%a %H:%M:%S} @{1}: {2}'.format(dt.fromtimestamp(int(x['timestamp_ms'])/1000), x['user']['screen_name'], x['text'])"
  py -c "${C_ARG}"  --ji -x "${X_ARG}"
