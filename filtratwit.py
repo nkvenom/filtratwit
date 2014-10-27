@@ -16,8 +16,12 @@ import tweepy
 import unicodedata
 from tuitelerias import get_auth
 
+
+
 def is_emoji(cp):
     '''
+    This function identifies emojis, cp is assumed to be a 32bit character
+
     :param cp: unicode codepoint
     :return: True if is a emoju
     '''
@@ -35,6 +39,7 @@ def is_emoji(cp):
 
 def get_uniord(char):
     '''
+    Convert a pair of 16bit chars into a single 32bit encoded unicode char
 
     :param char: a pair of unichrs representing a surrogate, unicode astral plane
     :return: the number representing the unique character
@@ -46,6 +51,9 @@ def get_uniord(char):
 
 def get_surrogates(ascii_chrs):
     '''
+    In the resulting twitter JSON emojis are encoded as a pair of ascii encoded utf-8 characters
+    Ex: '\ud83d\ude31' 'is FACE SCREAMING IN FEAR' or (U+1F631)
+
     :param ascii_chrs: an ascii escaped UTF-8 text
     :return: a list of unichrs representing the founded in the astral plane
     '''
@@ -55,6 +63,11 @@ def get_surrogates(ascii_chrs):
 
 
 def get_all_emojis(ascii_chrs):
+    '''
+    Get all emojis contained in the ascii encoded utf8 text
+    :param ascii_chrs:
+    :return:
+    '''
     return [x for x in get_surrogates(ascii_chrs) if is_emoji(get_uniord(x))]
 
 
