@@ -29,7 +29,6 @@ Filtrar los tuits de con el hashtag #angularjs que sean en español, el filtrado
 ./filtratwit.py "#angularjs" --lang=es
 ```
 
-### Aplicaciones complementarias
 
 Instalar la utilidad [pythonpy] (https://github.com/Russell91/pythonpy) que se usa con el comando py
 Para revisar los resultados de proceso se pueden usar pipes y comandos estandar de UNIX
@@ -42,4 +41,15 @@ O para monitoreo constante
 
 ```bash
 watch -n5 "tail -n20 RubyConfAR-20141024-1601.json | head -n-1 | formatuit"
+```
+
+### Rankear los hashtags más usados
+
+```bash
+cat rubyconfar-20141024-2335.json | \ 
+py --ji -x "x['text']" | \ 
+py -x "x if '#' in x else None" | \ 
+py -x "'\n'.join([j.lower() for j in x.split() if j.startswith('#')])" | \ 
+py -x "''.join(ch for ch in x if ch.isalnum())" | \ 
+sort | uniq -c | sort -nr
 ```
