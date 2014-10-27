@@ -8,6 +8,7 @@ import json
 
 from textwrap import TextWrapper
 import argparse
+from argparse import RawDescriptionHelpFormatter
 import os.path
 import re
 
@@ -149,13 +150,13 @@ class StreamWatcherListener(tweepy.StreamListener):
 def main(argv=None):
     stream = None
     try:
-        parser = argparse.ArgumentParser(description='Filter twits using the official API')
+        parser = argparse.ArgumentParser(description='Filter twits using the official API', formatter_class=RawDescriptionHelpFormatter)
 
         parser.add_argument('-w', '--only_with_emojis', default=False, action='store_true', help='Only store twitts that contains utf-8 emoji like characters')
         parser.add_argument('-c', '--locs', type=str, action='store', help='4 coords separated by commas, representing a bounding box', metavar='COORDINATES')
         parser.add_argument('-l', '--lang', type=str, action='store', help='filter in the client side by language, comma separated list of language codes, use \'und\' for undefined')
         parser.add_argument('-a','--auth', type=str, action='store', default='auth_twitter.conf', metavar='AUTHFILE')
-        parser.add_argument('-f', '--followlist', type=str, help='IDs of specified twitter accounts')
+        parser.add_argument('-f', '--followlist', type=str, help='IDs of specified twitter accounts separated by commas')
         parser.add_argument('tracklist', nargs='+', metavar='track_term', help='Space separated list of terms or hashtags to track')
 
         args = parser.parse_args()
@@ -188,7 +189,10 @@ def main(argv=None):
         stream = tweepy.Stream(my_auth, StreamWatcherListener(f_name, langs=langs,
                                                               only_with_emojis=args.only_with_emojis), timeout=None)
 
-        print('follow_list= {}'.format(follow_list))
+
+        if follow_list:
+            print('follow_list= {}'.format(follow_list))
+
         print('track_list= {}'.format(track_list))
 
         locs = None
