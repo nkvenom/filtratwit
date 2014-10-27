@@ -1,0 +1,75 @@
+#! /usr/bin/python3
+from __future__ import print_function
+
+import unicodedata
+from unicodedata import name
+import sys
+import codecs
+import re
+import optparse
+
+def is_emoji(cp):
+    '''
+    :param cp: unicode codepoint
+    :return: True if is a emoju
+    '''
+    # new in unicode 7
+    if 0x1F300 <= cp <= 0x1F5FF:
+        return True
+    # other emoticons
+    elif 0x1F600 <= cp <= 0x1F640F:
+        return True
+    elif 0x2600 <= cp <= 0x26FF:
+        return True
+    elif 0x2700 <= cp <= 0x27BF:
+        return True
+
+
+def get_uniord(char):
+    '''
+
+    :param char: a pair of unichrs representing a surrogate, unicode astral plane
+    :return: the number representing the unique character
+    '''
+    if len(char) != 2:
+        return ord(char)
+    return 0x10000 + (ord(char[0]) - 0xD800) * 0x400 + (ord(char[1]) - 0xDC00)
+
+
+def get_surrogates(ascii_chrs):
+    '''
+    :param ascii_chrs: an ascii escaped UTF-8 text
+    :return: a list of unichrs representing the founded in the astral plane
+    '''
+    chrs = re.findall(r'\\uD\w{3}\\uD\w{3}', ascii_chrs, flags=re.IGNORECASE | re.MULTILINE)
+    if chrs:
+        chrs = [codecs.decode(x, 'unicode_escape') for x in chrs]
+    else:
+        # returns bytes so match against bytes and the convert the result again to utf8
+        ascii_chrs = ascii_chrs.encode('unicode_escape')
+        chrs = re.findall(b'\\\\U000\w{5}', ascii_chrs, re.MULTILINE)
+        chrs = [ch.decode('unicode_escape') for ch in chrs]
+
+    return chrs
+
+
+def get_all_emojis(ascii_chrs):
+    return [x for x in get_surrogates(ascii_chrs) if is_emoji(get_uniord(x))]
+
+if __name__ == '__main__':
+    
+    p = optparse.OptionParser("Extract the name of the emojis from stdin")
+    p.add_option('--keep', '-k', action='store_true', default=False, help='Keep the original text')
+    (opts, args) = p.parse_args()
+
+    for line in sys.stdin:
+        text = line
+        emojis = get_all_emojis(text)
+
+        if opts.keep:
+            print('{}: {}'.format(','.join({name(e, '-') for e in emojis}), text))
+        else:
+            for e in emojis:
+                print(name(e, '-'))
+
+
