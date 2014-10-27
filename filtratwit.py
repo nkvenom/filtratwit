@@ -15,7 +15,6 @@ import tweepy
 import unicodedata
 from tuitelerias import get_auth
 
-
 def is_emoji(cp):
     '''
     :param cp: unicode codepoint
@@ -147,16 +146,16 @@ class StreamWatcherListener(tweepy.StreamListener):
         self.tweets_file.close()
 
 
-def main():
+def main(argv=None):
     stream = None
     try:
         parser = argparse.ArgumentParser(description='Filter twits using the official API')
 
         parser.add_argument('-w', '--only_with_emojis', default=False, action='store_true', help='Only store twitts that contains utf-8 emoji like characters')
-        parser.add_argument('--locs', nargs='?', help='4 coords separated by commas, representing a bounding box', metavar='COORDINATES')
-        parser.add_argument('--lang', nargs='?', help='filter in the client side by language, comma separated list of language codes, use \'und\' for undefined')
-        parser.add_argument('--auth', nargs='?', default='auth_twitter.conf', metavar='AUTHFILE')
-        parser.add_argument('-f', '--followlist', help='IDs of specified twitter accounts')
+        parser.add_argument('-c', '--locs', type=str, action='store', help='4 coords separated by commas, representing a bounding box', metavar='COORDINATES')
+        parser.add_argument('-l', '--lang', type=str, action='store', help='filter in the client side by language, comma separated list of language codes, use \'und\' for undefined')
+        parser.add_argument('-a','--auth', type=str, action='store', default='auth_twitter.conf', metavar='AUTHFILE')
+        parser.add_argument('-f', '--followlist', type=str, help='IDs of specified twitter accounts')
         parser.add_argument('tracklist', nargs='+', metavar='track_term', help='Space separated list of terms or hashtags to track')
 
         args = parser.parse_args()
