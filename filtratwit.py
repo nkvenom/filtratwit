@@ -18,12 +18,12 @@ from tuitelerias import get_auth
 
 import text_utils as tu
 
-class StreamWatcherListener(tweepy.StreamListener):
+class TwiterAPIListener(tweepy.StreamListener):
     status_wrapper = TextWrapper(width=60, initial_indent='    ', subsequent_indent='    ')
     tweets_file = None
 
     def __init__(self, f_name, create_dir=True, langs=None, only_with_emojis=False):
-        super(StreamWatcherListener, self).__init__()
+        super(TwiterAPIListener, self).__init__()
         self.only_with_emojis = only_with_emojis
         self.langs = None
 
@@ -134,7 +134,7 @@ def main(argv=None):
             langs = [u'' + l.strip() for l in args.lang.split(',')]
 
         f_name = tu.sanitize(f_name)
-        stream = tweepy.Stream(my_auth, StreamWatcherListener(f_name, langs=langs,
+        stream = tweepy.Stream(my_auth, TwiterAPIListener(f_name, langs=langs,
                                                               only_with_emojis=args.only_with_emojis), timeout=None)
 
 
