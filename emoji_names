@@ -8,6 +8,7 @@ import codecs
 import re
 import argparse
 
+import text_utils as tu
 
 def is_emoji(cp):
     '''

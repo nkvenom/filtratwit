@@ -36,17 +36,25 @@ def get_uniord(char):
     return 0x10000 + (ord(char[0]) - 0xD800) * 0x400 + (ord(char[1]) - 0xDC00)
 
 
+
 def get_surrogates(ascii_chrs):
     '''
     In the resulting twitter JSON emojis are encoded as a pair of ascii encoded utf-8 characters
     Ex: '\ud83d\ude31' 'is FACE SCREAMING IN FEAR' or (U+1F631)
-
     :param ascii_chrs: an ascii escaped UTF-8 text
     :return: a list of unichrs representing the founded in the astral plane
     '''
     chrs = re.findall(r'\\uD\w{3}\\uD\w{3}', ascii_chrs, flags=re.IGNORECASE | re.MULTILINE)
+    if chrs:
+        chrs = [codecs.decode(x, 'unicode_escape') for x in chrs]
+    else:
+        # returns bytes so match against bytes and the convert the result again to utf8
+        ascii_chrs = ascii_chrs.encode('unicode_escape')
+        chrs = re.findall(b'\\\\U000\w{5}', ascii_chrs, re.MULTILINE)
+        chrs = [ch.decode('unicode_escape') for ch in chrs]
 
-    return [codecs.decode(x, 'unicode_escape') for x in chrs]
+    return chrs
+
 
 
 def get_all_emojis(ascii_chrs):
