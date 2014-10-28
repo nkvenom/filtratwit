@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+# coding=utf-8
 # en el followlist van ids
 from __future__ import print_function
 from __future__ import unicode_literals
@@ -14,9 +15,26 @@ import re
 
 import tweepy
 import unicodedata
-from tuitelerias import get_auth
 
 import text_utils as tu
+
+
+
+def get_auth(conf_path='auth_twitter.conf'):
+    """ Lee los datos de autenticación de un archivo JSON """
+    with open(conf_path) as auth_f:
+        auth_data = json.loads(auth_f.read())
+        consumer_key = auth_data['consumer_key']
+        consumer_secret = auth_data['consumer_secret']
+
+        access_token = auth_data['access_token']
+        access_token_secret = auth_data['access_token_secret']
+
+        auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
+        auth.set_access_token(access_token, access_token_secret)
+
+    return auth
+
 
 class TwiterAPIListener(tweepy.StreamListener):
     status_wrapper = TextWrapper(width=60, initial_indent='    ', subsequent_indent='    ')
@@ -136,7 +154,6 @@ def main(argv=None):
         f_name = tu.sanitize(f_name)
         stream = tweepy.Stream(my_auth, TwiterAPIListener(f_name, langs=langs,
                                                               only_with_emojis=args.only_with_emojis), timeout=None)
-
 
         if follow_list:
             print('follow_list= {}'.format(follow_list))
