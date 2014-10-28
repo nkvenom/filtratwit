@@ -1,11 +1,8 @@
 #! /usr/bin/python3
 from __future__ import print_function
 
-import unicodedata
 from unicodedata import name
 import sys
-import codecs
-import re
 import argparse
 
 import text_utils as tu
