@@ -6,7 +6,8 @@ from unicodedata import name
 import sys
 import codecs
 import re
-import optparse
+import argparse
+
 
 def is_emoji(cp):
     '''
@@ -56,20 +57,20 @@ def get_surrogates(ascii_chrs):
 def get_all_emojis(ascii_chrs):
     return [x for x in get_surrogates(ascii_chrs) if is_emoji(get_uniord(x))]
 
+
 if __name__ == '__main__':
-    
-    p = optparse.OptionParser("Extract the name of the emojis from stdin")
-    p.add_option('--keep', '-k', action='store_true', default=False, help='Keep the original text')
-    (opts, args) = p.parse_args()
+
+    p = argparse.ArgumentParser("Extract the name of the emojis from stdin and printed it separated by commas")
+    p.add_argument('-k', '--keep', action='store_true', default=False, help='Keep the original text')
+    args = p.parse_args()
 
     for line in sys.stdin:
         text = line
         emojis = get_all_emojis(text)
 
-        if opts.keep:
+        if args.keep:
             print('{}: {}'.format(','.join({name(e, '-') for e in emojis}), text))
         else:
-            for e in emojis:
-                print(name(e, '-'))
+            print('{}'.format(','.join({name(e, '-') for e in emojis}), text))
 
 
