@@ -122,6 +122,7 @@ def main(argv=None):
         parser.add_argument('-c', '--locs', type=str, action='store', help='4 coords separated by commas, representing a bounding box', metavar='COORDINATES')
         parser.add_argument('-l', '--lang', type=str, action='store', help='filter in the client side by language, comma separated list of language codes, use \'und\' for undefined')
         parser.add_argument('-a','--auth', type=str, action='store', default='auth_twitter.conf', metavar='AUTHFILE')
+        parser.add_argument('-n','--no_create_dir', default=False, action='store_true')
         parser.add_argument('-f', '--followlist', type=str, help='IDs of specified twitter accounts separated by commas')
         parser.add_argument('tracklist', nargs='+', metavar='track_term', help='Space separated list of terms or hashtags to track')
 
@@ -129,9 +130,6 @@ def main(argv=None):
 
         print("Using auth file={}".format(args.auth))
         my_auth = get_auth(args.auth)
-
-        follow_list = []
-        track_list = []
 
         follow_list = args.followlist
         track_list = args.tracklist
@@ -153,6 +151,7 @@ def main(argv=None):
 
         f_name = tu.sanitize(f_name)
         stream = tweepy.Stream(my_auth, TwiterAPIListener(f_name, langs=langs,
+                                                              create_dir=not args.no_create_dir,
                                                               only_with_emojis=args.only_with_emojis), timeout=None)
 
         if follow_list:
