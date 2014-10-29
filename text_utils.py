@@ -41,13 +41,16 @@ def get_surrogates(ascii_chrs):
     '''
     In the resulting twitter JSON emojis are encoded as a pair of ascii encoded utf-8 characters
     Ex: '\ud83d\ude31' 'is FACE SCREAMING IN FEAR' or (U+1F631)
-    :param ascii_chrs: an ascii escaped UTF-8 text
-    :return: a list of unichrs representing the founded in the astral plane
+    :param ascii_chrs: an ascii escaped UTF-8 text or a utf-8 string
+    :return: a list of unichrs representing the ones founded in the astral plane
     '''
+
+    # If we find an ascii encode surrogate pair the convert to unicode
     chrs = re.findall(r'\\uD\w{3}\\uD\w{3}', ascii_chrs, flags=re.IGNORECASE | re.MULTILINE)
     if chrs:
         chrs = [codecs.decode(x, 'unicode_escape') for x in chrs]
     else:
+        # If ascii encoded surrogetes are not founded in the text
         # returns bytes so match against bytes and the convert the result again to utf8
         ascii_chrs = ascii_chrs.encode('unicode_escape')
         chrs = re.findall(b'\\\\U000\w{5}', ascii_chrs, re.MULTILINE)
@@ -55,7 +58,13 @@ def get_surrogates(ascii_chrs):
 
     return chrs
 
-
+def to_surrogates(unich):
+    '''
+    Returns an ascii surrogate pair given an already encoded unicode character
+    :param unich:
+    :return:
+    '''
+    return codecs.encode(unich, 'unicode_escape')
 
 def get_all_emojis(ascii_chrs):
     '''

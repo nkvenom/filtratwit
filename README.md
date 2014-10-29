@@ -3,9 +3,13 @@ filtratwit
 
 Utilidad de linea de comandos para filtrar y descargar twits en formato JSON
 
+### Plataformas
+
+Funciona en Linux y en Windows a través de cygwin
+
 ### Requisitos
 
-* python 2.6X o superior
+* python 3X 
 * pip
 * pythonpy (opcional): para ver como texto los tuits descargados
 
@@ -13,7 +17,7 @@ Utilidad de linea de comandos para filtrar y descargar twits en formato JSON
 
 Para instalar las librerias necesarias pip install -r requirements.txt
 Ir a [dev.twitter.com/apps](dev.twitter.com/apps) y crear una aplicación llenando los datos necesarios, luego copiar los datos de autenticación a auth_twitter.conf 
-
+La versión oficial de tweepy no funciona con python3, asi que por el momento es recomendable usar este port [https://github.com/judy2k/tweepy]( https://github.com/judy2k/tweepy)
 
 ### Ejemplos
 
@@ -47,9 +51,9 @@ watch -n5 "tail -n20 RubyConfAR-20141024-1601.json | head -n-1 | formatuit"
 
 ```bash
 cat rubyconfar-20141024-2335.json | \ 
-py --ji -x "x['text']" | \ 
-py -x "x if '#' in x else None" | \ 
-py -x "'\n'.join([j.lower() for j in x.split() if j.startswith('#')])" | \ 
-py -x "''.join(ch for ch in x if ch.isalnum())" | \ 
+py --ji -x "x['text']" | # la opcion --ji quiere decir que interprete la entrada como JSON \ 
+py -x "x if '#' in x else None" | # Si no encuentra hashtags en el texto ignorar la linea\ 
+py -x "'\n'.join([j.lower() for j in x.split() if j.startswith('#')])" | #Extraer los hashtags y separarlos por cambios de linea \ 
+py -x "''.join(ch for ch in x if ch.isalnum())" | # Limpiar los hashtags si caracteres no alfabeticos contiguos \ 
 sort | uniq -c | sort -nr
 ```
