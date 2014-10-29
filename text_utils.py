@@ -36,6 +36,15 @@ def get_uniord(char):
     return 0x10000 + (ord(char[0]) - 0xD800) * 0x400 + (ord(char[1]) - 0xDC00)
 
 
+def to_char(ch0, ch1):
+    '''
+    Get a unicode codepoint from a pair of surrogates
+    :param ch0: char1
+    :param ch1: char2
+    :return:
+    '''
+    return 0x10000 + (ord(ch0) - 0xD800) * 0x400 + (ord(ch1) - 0xDC00)
+
 
 def get_surrogates(ascii_chrs):
     '''
@@ -58,13 +67,7 @@ def get_surrogates(ascii_chrs):
 
     return chrs
 
-def to_surrogates(unich):
-    '''
-    Returns an ascii surrogate pair given an already encoded unicode character
-    :param unich:
-    :return:
-    '''
-    return codecs.encode(unich, 'unicode_escape')
+
 
 def get_all_emojis(ascii_chrs):
     '''
