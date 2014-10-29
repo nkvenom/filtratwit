@@ -1,5 +1,6 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # coding=utf-8
+
 # en el followlist van ids
 from __future__ import print_function
 from __future__ import unicode_literals
