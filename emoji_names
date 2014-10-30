@@ -12,15 +12,18 @@ if __name__ == '__main__':
 
     p = argparse.ArgumentParser("Extract the name of the emojis from stdin and printed it separated by commas")
     p.add_argument('-k', '--keep', action='store_true', default=False, help='Keep the original text')
+    p.add_argument('-s', '--separator', type=str, default=',', nargs='?', help='Separator for the founded emojis')
     args = p.parse_args()
 
+    sep = args.separator
+    sep = '\n' if sep == '\\n' else sep
     for line in sys.stdin:
         text = line
         emojis = tu.get_all_emojis(text)
 
         if args.keep:
-            print('{}: {}'.format(','.join({name(e, '-') for e in emojis}), text))
+            print('{}: {}'.format(sep.join({name(e, '-') for e in emojis}), text))
         else:
-            print('{}'.format(','.join({name(e, '-') for e in emojis}), text))
+            print('{}'.format(sep.join({name(e, '-') for e in emojis}), text))
 
 
