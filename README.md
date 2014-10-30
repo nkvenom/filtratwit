@@ -48,12 +48,13 @@ watch -n5 "tail -n20 RubyConfAR-20141024-1601.json | head -n-1 | formatuit"
 ```
 
 ### Rankear los hashtags más usados
+Para que funcione este ejemplo es necesario quitar los comentarios, si aún no funciona quitar los backslashes
 
 ```bash
 cat rubyconfar-20141024-2335.json | \ 
-py --ji -x "x['text']" | # la opcion --ji quiere decir que interprete la entrada como JSON \ 
-py -x "x if '#' in x else None" | # Si no encuentra hashtags en el texto ignorar la linea\ 
-py -x "'\n'.join([j.lower() for j in x.split() if j.startswith('#')])" | #Extraer los hashtags y separarlos por cambios de linea \ 
-py -x "''.join(ch for ch in x if ch.isalnum())" | # Limpiar los hashtags si caracteres no alfabeticos contiguos \ 
+py --ji -x "x['text']" | \ # la opcion --ji quiere decir que interprete la entrada como JSON 
+py -x "x if '#' in x else None" | \ # Si no encuentra hashtags en el texto ignorar la linea
+py -x "'\n'.join([j.lower() for j in x.split() if j.startswith('#')])" | \ #Extraer los hashtags y separarlos por cambios de linea 
+py -x "''.join(ch for ch in x if ch.isalnum())" | \ # Limpiar los hashtags si caracteres no alfabeticos contiguos 
 sort | uniq -c | sort -nr
 ```
