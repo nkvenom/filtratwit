@@ -66,3 +66,7 @@ sort | uniq -c | sort -nr
 
 * **most_retweeted.sh**: Imprime el top 10 de los twits mas retuiteados, recibe un argumento que es la ruta al archivo que contiene los tuits.
 
+* **formatuit**: la idea de esta utilidad es pasarle un pipe de twits para que los imprima en un formato legible.
+
+* **emoji_names**: imprime los emojis que encuentra en cada twit, si se le pasa el parametro -k conserva el texto original, se le puede pasar la opción -s para especificarle un separador distinto a la coma ','
+
