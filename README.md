@@ -48,7 +48,7 @@ watch -n5 "tail -n20 RubyConfAR-20141024-1601.json | head -n-1 | formatuit"
 ```
 
 ### Rankear los hashtags más usados
-Para que funcione este ejemplo es necesario quitar los comentarios, si aún no funciona quitar los backslashes
+Para que funcione este ejemplo es necesario quitar los comentarios, si aún no funciona quitar los backslashes. Este ejemplo se implemento en el archivo top_hashtags.sh
 
 ```bash
 cat rubyconfar-20141024-2335.json | \ 
