@@ -64,3 +64,5 @@ sort | uniq -c | sort -nr
 
 * top_emoticons.sh: Imprime el top 10 de los emoticons más usados, recibe como argumento la ruta al archivo que contiene un twitt/JSON por línea.
 
+* most_retweeted.sh: Imprime el top 10 de los twits mas retuiteados, recibe un argumento que es la ruta al archivo que contiene los tuits.
+
