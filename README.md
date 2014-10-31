@@ -60,7 +60,7 @@ sort | uniq -c | sort -nr
 ```
 
 ### Scripts
-* top_hashtags.sh: Imprime los hashtags más usados junto con el número de veces que se uso cada uno
+* top_hashtags.sh: Imprime los hashtags más usados junto con el número de veces que se uso cada uno, recibe como argumento la ruta al archivo que contiene un twitt/JSON por línea.
 
-* top_emoticons.sh: Imprime el top 10 de los emoticons más usados.
+* top_emoticons.sh: Imprime el top 10 de los emoticons más usados, recibe como argumento la ruta al archivo que contiene un twitt/JSON por línea.
 
