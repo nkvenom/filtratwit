@@ -61,3 +61,6 @@ sort | uniq -c | sort -nr
 
 ### Scripts
 * top_hashtags.sh: Imprime los hashtags más usados junto con el número de veces que se uso cada uno
+
+* top_emoticons.sh: Imprime el top 10 de los emoticons más usados.
+
