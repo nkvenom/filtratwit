@@ -58,3 +58,6 @@ py -x "'\n'.join([j.lower() for j in x.split() if j.startswith('#')])" | \ #Extr
 py -x "''.join(ch for ch in x if ch.isalnum())" | \ # Limpiar los hashtags si caracteres no alfabeticos contiguos 
 sort | uniq -c | sort -nr
 ```
+
+### Scripts
+* top_hashtags.sh: Imprime los hashtags más usados junto con el número de veces que se uso cada uno
