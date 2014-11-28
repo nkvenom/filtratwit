@@ -44,7 +44,7 @@ class TwiterAPIListener(tweepy.StreamListener):
     def __init__(self, f_name, create_dir=True, langs=None, only_with_emojis=False):
         super(TwiterAPIListener, self).__init__()
         self.only_with_emojis = only_with_emojis
-        self.langs = None
+        self.langs = langs
 
         today = datetime.today()
         ctime = today.strftime('%Y%m%d-%H%M')
