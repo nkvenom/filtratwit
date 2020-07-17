@@ -1,2 +1,2 @@
-simplejson==3.6.4
+simplejson==3.17.2
 tweepy==2.3.0
